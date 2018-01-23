@@ -3,12 +3,12 @@
 minetest.register_node("nodevoxel:cube", {
     description = "Nodevoxel Cube",
     tiles = {
-        "nodevoxel_cube_up.png",
-        "nodevoxel_cube_down.png",
-        "nodevoxel_cube_right.png",
-        "nodevoxel_cube_left.png",
-        "nodevoxel_cube_back.png",
-        "nodevoxel_cube_front.png"
+        "nodevoxel_cube_up.png^[colorize:#FF000050",
+        "nodevoxel_cube_down.png^[colorize:#FF000050",
+        "nodevoxel_cube_right.png^[colorize:#FF000050",
+        "nodevoxel_cube_left.png^[colorize:#FF000050",
+        "nodevoxel_cube_back.png^[colorize:#FF000050",
+        "nodevoxel_cube_front.png^[colorize:#FF000050"
 },
     is_ground_content = true,
 
