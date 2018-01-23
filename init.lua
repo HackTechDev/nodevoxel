@@ -1,5 +1,22 @@
 -- Node Voxel
 
+minetest.register_node("nodevoxel:cube", {
+    description = "Nodevoxel Cube",
+    tiles = {
+        "nodevoxel_cube_up.png",
+        "nodevoxel_cube_down.png",
+        "nodevoxel_cube_right.png",
+        "nodevoxel_cube_left.png",
+        "nodevoxel_cube_back.png",
+        "nodevoxel_cube_front.png"
+},
+    is_ground_content = true,
+
+    groups = {
+        cracky = 3
+},
+})
+
 -- http://lua-users.org/wiki/FileInputOutput
 
 -- see if the file exists
@@ -60,7 +77,7 @@ minetest.register_chatcommand("nodevoxel", {
                 for k,v in pairs(lines) do
                   if k >= 4 then
                     x, y, z, c = v:match("([^,]+) ([^,]+) ([^,]+) ([^,]+)")
-                    minetest.set_node({x=pos.x + x, y=pos.y + z, z=pos.z + y}, {name="default:wood"})
+                    minetest.set_node({x=pos.x + x, y=pos.y + z, z=pos.z + y}, {name="nodevoxel:cube"})
                     print (k .. ' : ', x, y, z, c)
                   end
                 end
