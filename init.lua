@@ -1,22 +1,5 @@
--- Node Voxel
 
-minetest.register_node("nodevoxel:cube", {
-    description = "Nodevoxel Cube",
-    tiles = {
-        "nodevoxel_cube_up.png^[colorize:#FF000050",
-        "nodevoxel_cube_down.png^[colorize:#FF000050",
-        "nodevoxel_cube_right.png^[colorize:#FF000050",
-        "nodevoxel_cube_left.png^[colorize:#FF000050",
-        "nodevoxel_cube_back.png^[colorize:#FF000050",
-        "nodevoxel_cube_front.png^[colorize:#FF000050"
-},
-    is_ground_content = true,
-
-    groups = {
-        cracky = 3
-},
-})
-
+-- File functions
 -- http://lua-users.org/wiki/FileInputOutput
 
 -- see if the file exists
@@ -37,6 +20,48 @@ function lines_from(file)
   return lines
 end
 
+-- Node Voxel
+
+
+function generateNodeVoxel(file)
+    local lines = lines_from(file)
+
+    -- print all line numbers and their contents
+    for k,v in pairs(lines) do
+      if k >= 4 then -- Pass the description header
+        x, y, z, cubeColor = v:match("([^,]+) ([^,]+) ([^,]+) ([^,]+)")
+
+        minetest.register_node("nodevoxel:cube" .. cubeColor, {
+            description = "Nodevoxel Cube" .. cubeColor,
+            tiles = {
+                "nodevoxel_cube_up.png^[colorize:#" .. cubeColor .. "50",
+                "nodevoxel_cube_down.png^[colorize:#" .. cubeColor .. "50",
+                "nodevoxel_cube_right.png^[colorize:#" .. cubeColor .. "50",
+                "nodevoxel_cube_left.png^[colorize:#" .. cubeColor .. "50",
+                "nodevoxel_cube_back.png^[colorize:#" .. cubeColor .. "50",
+                "nodevoxel_cube_front.png^[colorize:#" .. cubeColor .. "50"
+        },
+            is_ground_content = true,
+
+            groups = {
+                cracky = 3
+        },
+        })
+
+        print (k .. ' : ', x, y, z, cubeColor)
+      end
+    end
+end
+
+-- Object voxel list
+local aObjectVoxel = {'obj01.txt'}
+
+for key,value in pairs(aObjectVoxel) do
+   print(key, value)
+   generateNodeVoxel(value)
+end
+
+-- Chat commands
 
 minetest.register_chatcommand("nodevoxel", {
     params = "<entity name> <entity param>",
@@ -66,19 +91,19 @@ minetest.register_chatcommand("nodevoxel", {
         if nodevoxelAction == "add" then
             minetest.chat_send_player(user, "Add nodevoxel  " .. nodevoxelParam)
 
-            if nodevoxelParam == "1" then
+            if nodevoxelParam == "01" then
                 -- y = height
 
-                -- tests the functions above
-                local file = 'obj01.txt'
+                local file = "obj" .. nodevoxelParam .. ".txt"
                 local lines = lines_from(file)
 
                 -- print all line numbers and their contents
                 for k,v in pairs(lines) do
                   if k >= 4 then
-                    x, y, z, c = v:match("([^,]+) ([^,]+) ([^,]+) ([^,]+)")
-                    minetest.set_node({x=pos.x + x, y=pos.y + z, z=pos.z + y}, {name="nodevoxel:cube"})
-                    print (k .. ' : ', x, y, z, c)
+                    x, y, z, cubeColor = v:match("([^,]+) ([^,]+) ([^,]+) ([^,]+)")
+
+                    minetest.set_node({x=pos.x + x, y=pos.y + z, z=pos.z + y}, {name="nodevoxel:cube" .. cubeColor})
+                    print (k .. ' : ', x, y, z, cubeColor)
                   end
                 end
 
