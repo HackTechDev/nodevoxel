@@ -1,3 +1,21 @@
+-- Array functions
+
+function tprint(t)
+   for key,value in pairs(t) do
+       print(key, value)
+   end
+end
+
+function has_value (tab, val)
+    for index, value in ipairs(tab) do
+        if value == val then
+            return true
+        end
+    end
+
+    return false
+end
+
 
 -- File functions
 -- http://lua-users.org/wiki/FileInputOutput
@@ -26,28 +44,36 @@ end
 function generateNodeVoxel(file)
     local lines = lines_from(file)
 
+    local aNodevoxel = {}
+    
     -- print all line numbers and their contents
     for k,v in pairs(lines) do
       if k >= 4 then -- Pass the description header
         x, y, z, cubeColor = v:match("([^,]+) ([^,]+) ([^,]+) ([^,]+)")
 
-        minetest.register_node("nodevoxel:cube" .. cubeColor, {
-            description = "Nodevoxel Cube" .. cubeColor,
-            tiles = {
-                "nodevoxel_cube_up.png^[colorize:#" .. cubeColor .. "50",
-                "nodevoxel_cube_down.png^[colorize:#" .. cubeColor .. "50",
-                "nodevoxel_cube_right.png^[colorize:#" .. cubeColor .. "50",
-                "nodevoxel_cube_left.png^[colorize:#" .. cubeColor .. "50",
-                "nodevoxel_cube_back.png^[colorize:#" .. cubeColor .. "50",
-                "nodevoxel_cube_front.png^[colorize:#" .. cubeColor .. "50"
-        },
-            is_ground_content = true,
+        if has_value(aNodevoxel, cubeColor) then
+            print 'Nodevoxel exists, does not create it'
+        else
+            print("Nodevoxel does not exist, create it: " .. cubeColor)
+            table.insert(aNodevoxel, cubeColor)
+    
+            minetest.register_node("nodevoxel:cube" .. cubeColor, {
+                description = "Nodevoxel Cube" .. cubeColor,
+                tiles = {
+                    "nodevoxel_cube_up.png^[colorize:#" .. cubeColor .. "50",
+                    "nodevoxel_cube_down.png^[colorize:#" .. cubeColor .. "50",
+                    "nodevoxel_cube_right.png^[colorize:#" .. cubeColor .. "50",
+                    "nodevoxel_cube_left.png^[colorize:#" .. cubeColor .. "50",
+                    "nodevoxel_cube_back.png^[colorize:#" .. cubeColor .. "50",
+                    "nodevoxel_cube_front.png^[colorize:#" .. cubeColor .. "50"
+            },
+                is_ground_content = true,
 
-            groups = {
-                cracky = 3
-        },
-        })
-
+                groups = {
+                    cracky = 3
+            },
+            })
+        end
         print (k .. ' : ', x, y, z, cubeColor)
       end
     end
